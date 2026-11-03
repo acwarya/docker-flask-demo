@@ -42,12 +42,16 @@ jobs:
         run: docker build -t docker-flask-demo:ci .
 
       - name: Scan image for vulnerabilities (Trivy)
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          image-ref: docker-flask-demo:ci
-          severity: CRITICAL,HIGH
-          ignore-unfixed: true
-          exit-code: "0"
+        # Run Trivy from its official image so the full output shows in the log.
+        # exit-code 0 = report only. Change to 1 to fail the build on findings.
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:latest image \
+            --severity CRITICAL,HIGH \
+            --ignore-unfixed \
+            --exit-code 0 \
+            docker-flask-demo:ci
 
       - name: Integration smoke test (docker compose)
         run: |
