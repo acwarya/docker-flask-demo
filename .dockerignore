@@ -1,0 +1,13 @@
+.git
+.github
+__pycache__
+*.pyc
+.venv
+tests
+.pytest_cache
+.ruff_cache
+.coverage
+k8s
+monitoring
+grafana
+*.md
